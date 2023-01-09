@@ -1,0 +1,8 @@
+.spcard {
+    gap: 4px;
+    width: 44.800vw;
+}
+
+.spcard img{
+    height: auto !important;
+}
