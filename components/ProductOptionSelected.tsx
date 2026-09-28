@@ -1,32 +1,18 @@
-import React from "react";
-
+/* Aba de categoria acessível (antes era uma div clicável, sem teclado nem estado para leitores de tela) */
 interface PropTypes {
   isSelected: boolean;
   contentValue: string;
-  onClick?(): void;
+  controls: string;
+  onClick(): void;
 }
 
-export default function ProductOptionSelected({
-  contentValue,
-  isSelected,
-  onClick,
-}: PropTypes) {
+export default function ProductOptionSelected({ contentValue, isSelected, controls, onClick }: PropTypes) {
   return (
-    <>
-      {isSelected ? (
-        <div onClick={onClick} className="content-center px-2">
-          <div className="font-sans  text-tahiti-54 font-normal text-lg ">
-            {contentValue}
-          </div>
-          <div className="bg-tahiti-54 w-2 h-2 rounded-full mb-1 mx-auto"></div>
-        </div>
-      ) : (
-        <div onClick={onClick} className="content-center px-2">
-          <div className="font-sans text-tahiti-58 font-normal text-lg ">
-            {contentValue}
-          </div>
-        </div>
-      )}
-    </>
+    <button type="button" role="tab" aria-selected={isSelected} aria-controls={controls} onClick={onClick}
+      className={`px-2 py-1 text-lg font-sans ${isSelected ? "text-[#9a3412]" : "text-tahiti-56"}`}>
+      {contentValue}
+      <span aria-hidden="true" className={`block w-2 h-2 rounded-full mx-auto mt-0.5 ${isSelected ? "bg-[#9a3412]" : "bg-transparent"}`} />
+    </button>
   );
 }
+/* Fim de ProductOptionSelected.tsx */

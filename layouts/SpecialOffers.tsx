@@ -1,26 +1,13 @@
+/* Seção de destaques da página inicial */
 import ProductBox from "../components/ProductBox";
+import type { MenuItem } from "../data/menu";
 
-interface PropTypes {
-    products: {
-        sku: string;
-        title: string;
-        main_image: string;
-        availability: boolean;
-    }[];
+export default function SpecialOffers({ products }: { products: MenuItem[] }) {
+  return (
+    <section className="bg-gray-200" aria-labelledby="destaques">
+      <h2 id="destaques" className="text-center text-[#9a3412] font-semibold mb-2">Destaques da casa</h2>
+      <ProductBox products={products} />
+    </section>
+  );
 }
-
-const SpecialOffers = (
-    props: PropTypes
-) => {
-
-    return (
-        <section className="bg-gray-200">
-            <div className="flex justify-center w-full h-6">
-                <h2 className="text-tahiti-54">Ofertas Especiais</h2>
-            </div>
-            <ProductBox products={props.products} />
-        </section>
-    );
-};
-
-export default SpecialOffers;
+/* Fim de SpecialOffers.tsx */

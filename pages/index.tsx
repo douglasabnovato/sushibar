@@ -1,34 +1,22 @@
-import type { GetStaticProps, NextPage } from "next";
-import { InferGetStaticPropsType } from "next";
+/* Página inicial: cabeçalho, destaques e atalhos */
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import Header from "../layouts/Header";
-
-import { getProducts } from "../services/Supabase/Products";
-
 import SpecialOffers from "../layouts/SpecialOffers";
 import SeeMore from "../layouts/SeeMore";
+import { featured, loadMenu, type Menu } from "../lib/menu";
 
-const Home: NextPage = (
-  props: InferGetStaticPropsType<typeof getStaticProps>
-) => {
-
+export default function Home({ menu }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <Header title="Sushibar"/>
-      <main className="min-h-screen bg-gray-200 pt-3 justify-center items-center">
-          <SpecialOffers products={props.products.slice(0, 4)} />
-          <SeeMore />
+      <Header title="Sushibar" hero />
+      <main className="min-h-screen bg-gray-200 pt-3 pb-6">
+        <h1 className="sr-only">Sushibar — culinária japonesa</h1>
+        <SpecialOffers products={featured(menu)} />
+        <SeeMore />
       </main>
     </>
   );
-};
+}
 
-export const getStaticProps: GetStaticProps = async () => {
-  const products = await getProducts();
-  return {
-    props: { products },
-  };
-};
-
-
-export default Home;
-
+export const getStaticProps: GetStaticProps<{ menu: Menu }> = async () => ({ props: { menu: await loadMenu() } });
+/* Fim de index.tsx */

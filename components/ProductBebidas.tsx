@@ -1,18 +1,15 @@
-import React from "react";
+/* Atalho "Bebidas": o cartão inteiro é o link (antes só o texto pequeno era clicável) */
+import Link from "next/link";
 import IconBebida from "./Icons/IconBebida";
-import Link from 'next/link';
 
 export default function ProductBebidas() {
-    return (
-        <div className="mx-1 my-3 py-4 px-5 bg-white border-2 border-gray-300 rounded-xl tracking-wide shadow-lg text-tahiti-100 ">
-            <div className="block">
-                <div>
-                    <IconBebida />
-                </div>
-                <div className="mt-3 text-xs" >
-                    <Link href="/bebidas">Bebidas</Link>
-                </div>
-            </div>
-        </div> 
-    )
+  return (
+    <Link href="/bebidas" className="mx-1 my-3 py-4 px-5 bg-white border-2 border-gray-300 rounded-xl shadow-lg text-tahiti-100 block">
+      <span aria-hidden="true">
+        <IconBebida />
+      </span>
+      <span className="mt-3 text-sm block">Bebidas</span>
+    </Link>
+  );
 }
+/* Fim de ProductBebidas.tsx */

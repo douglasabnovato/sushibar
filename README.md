@@ -1,156 +1,48 @@
-<h4 align="center"> 
-	🚧 Sushibar 🚀
+<h4 align="center">
+	🍣 Sushibar 🚀
 </h4>
 
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
   <img alt="versão 1 do projeto" title="#cardapio" src="./.github/tela-1.jpg" >
-</p>  
+</p>
 
-## Getting Started
+Site mobile-first de um restaurante japonês: destaques, cardápio por categoria, bebidas e a página "Nosso espaço" com reserva pelo WhatsApp. Layout no [Figma](https://www.figma.com/file/UiLvyL3UxGZt15t0IDcP80/Sushibar?node-id=0%3A1&t=zffdeG1GjpNHWrwe-0).
 
-First, run the development server:
+## Em produção
+
+- URL: https://douglasabnovato.github.io/sushibar/
+- Hospedagem: GitHub Pages (gratuito), publicado pelo GitHub Actions a cada push na `main`
+- Passo a passo: [docs/DEPLOY.md](docs/DEPLOY.md)
+
+## Stack
+
+Next.js 16 (Pages Router, exportação estática) · React 19 · Tailwind CSS 3 · Supabase (opcional)
+
+## Como executar
 
 ```bash
-npm run dev
-# or
-yarn dev
+npm install
+npm run dev     # http://localhost:3000
+npm test
+npm run build   # gera out/ (site estático publicado em /sushibar)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## De onde vem o cardápio
 
-### Learn More
+- Sem configuração: `data/menu.ts` (itens e preços ilustrativos — edite com os reais).
+- Com Supabase: copie `.env.example` para `.env.local` e preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Tabelas: `categories (id, title)` e `products (id, title, description, price, main_image, category_id, featured)`. O cardápio é lido no build: depois de alterar o Supabase, rode o workflow de novo (Actions → CI → Run workflow). Se o Supabase falhar no build, o site usa o cardápio local.
+- WhatsApp de reservas e aviso de demonstração: `lib/site.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+## Qualidade (v1.0)
 
-- You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+| Medida | Resultado |
+|---|---|
+| Lighthouse (mobile) | Desempenho 97 · Acessibilidade 100 · Boas práticas 96 · SEO 100 |
+| axe-core (WCAG 2.2 AA) | 0 violações nas 5 páginas |
+| `npm audit` | 0 vulnerabilidades |
 
-## Layout
+Detalhes em [docs/ANALISE.md](docs/ANALISE.md), [docs/ARQUITETURA.md](docs/ARQUITETURA.md) e [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md).
 
-- Design no [Figma](https://www.figma.com/file/UiLvyL3UxGZt15t0IDcP80/Sushibar?node-id=0%3A1&t=zffdeG1GjpNHWrwe-0)
+## Publicação gratuita
 
-## Components
-
-Criado a branch components para desenvolver
-
-- ProductBox
-- ProductMenu
-- ProductListItem
-- ProductOptionSelected
-- ProductHamburguerMenu
-
-### Components Templates
-
-<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/components-1-5.jpg" height="400px">
-</p>  
-
-### Anotações do ProductBox Component 
-
-- [x] Construir componente conforme design figma
-- [x] img 100% com div e adicionar border radius
-- [x] Adicionar Título
-- [x] Adicionar favicon personalizado
-- [x] Adicionar detalhes no readme
-
-### Anotações do ProductMenu Component 
-
-- [x] Construir componente conforme design figma
-- [x] Separado o componente corretamente
-
-### Anotações do ProductListItem Component 
-
-- [x] Remover o id
-- [ ] ajustar o tamanho da imagem
-
-### Anotações do ProductOptionSelected Component 
-
-- [x] Construir componente conforme design figma
-
-### Anotações do ProductHamburguerMenu Component 
-
-- [x] Construir componente conforme design figma
-
-### Componentes
-
-<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/component-A1.jpg" height="400px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/component-A2.jpg" height="200px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/component-A3.jpg" height="200px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/component-A4.jpg" height="200px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/component-A5.jpg" height="200px">
-</p>  
-
-## Pages
-
-Criado a branch components para desenvolver
-
-- Home
-- Cardápio 
-- Bebidas
-- Nosso Espaço  
-
-### Pages Templates
-
-<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/page-1.jpg" height="400px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/page-2.jpg" height="400px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/page-3.jpg" height="400px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/page-4.jpg" height="400px">
-</p>  
-
-### Anotações da Index Page 
-
-- [x] Construir página conforme design figma
-- [x] fazendo a grid de ofertas especiais com tamanho de image
-- [x] space-between das informações e titulo
-- [x] justify-content: center no título do grid
-- [x] background colorida da imagem
-- [x] dimensões da grid da sessão veja mais
-- [x] 3 botões para as páginas
-- [ ] background imagem na sessão ofertas especiais
-
-### Anotações da Cardápio Page 
-
-- [x] Construir página conforme design figma 
-- [x] Botão carregar mais
-- [x] Construir layout menu: botões clicáveis, Filtrar por categoria, useMemo
-- [ ] Aperfeiçoar botão return para home
-- [ ] background imagem nos cards
-
-### Anotações da Bebidas Page 
-
-- [x] Construir página conforme design figma
-- [x] Botão carregar mais
-- [x] Construir layout menu: botões clicáveis, Filtrar por categoria, useMemo
-- [ ] Aperfeiçoar botão return para home
-- [ ] background imagem nos cards
-
-### Anotações da Nosso Espaço Page 
-
-- [x] Construir página conforme design figma
-- [x] Criado os elementos em tela
-- [x] Estilizar e posicionar
-- [x] Aperfeiçoar com padding certo
-- [ ] Aperfeiçoar botão return para home
-- [ ] Aperfeiçoar font-size 
-- [ ] Aperfeiçoar posição das imagens
-
-### Importantes
-
-- [ ] Botão carregar mais
-- [ ] Estruturar paginação
-- [ ] Performance de requisição
-- [ ] Warnings
-- [x] Header
-- [x] Componente barra top e barra bottom
-
-### Páginas
-
-- Home, Cardápio, Bebidas, Nosso Espaço
-
-<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/tela-2.jpg" height="400px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/tela-3.jpg" height="400px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/tela-4.jpg" height="400px">
-  <img alt="versão 1 do projeto" title="#cardapio" src="./.github/tela-5.jpg" height="400px">
-</p> 
+GitHub Pages: o site é exportado como HTML estático (`output: 'export'` em `next.config.js`) e publicado pelo workflow de CI. Se usar Supabase, cadastre as duas variáveis em Settings → Secrets and variables → Actions → **Variables**. Se o nome do repositório mudar, ajuste `repoBasePath` em `next.config.js`. Passo a passo em [docs/DEPLOY.md](docs/DEPLOY.md).

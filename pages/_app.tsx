@@ -1,8 +1,16 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+/* Aplicação: estilos globais e rodapé comum */
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import { site } from "../lib/site";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+export default function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <Component {...pageProps} />
+      <footer className="bg-tahiti-100 text-white text-xs text-center py-3">
+        © {new Date().getFullYear()} {site.name}.{site.isDemo ? " Site de demonstração: preços e itens ilustrativos." : ""}
+      </footer>
+    </>
+  );
 }
-
-export default MyApp
+/* Fim de _app.tsx */

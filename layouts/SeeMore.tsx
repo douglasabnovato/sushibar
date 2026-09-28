@@ -1,21 +1,18 @@
+/* Atalhos para cardápio, bebidas e nosso espaço */
 import ProductCardapio from "../components/ProductCardapio";
 import ProductBebidas from "../components/ProductBebidas";
 import ProductNossoEspaco from "../components/ProductNossoEspaco";
 
-const SeeMore = () => {
-
-    return (
-        <section className="bg-gray-200 pt-3">
-            <div className="flex justify-center w-full h-6">
-                <h2 className="text-tahiti-54">Veja mais</h2>
-            </div>
-            <div className="flex justify-left px-6">
-                <ProductCardapio />
-                <ProductBebidas />
-                <ProductNossoEspaco />
-            </div>
-        </section>
-    );
-};
-
-export default SeeMore;
+export default function SeeMore() {
+  return (
+    <section className="bg-gray-200 pt-3" aria-labelledby="veja-mais">
+      <h2 id="veja-mais" className="text-center text-[#9a3412] font-semibold">Veja mais</h2>
+      <div className="flex flex-wrap justify-center px-6">
+        <ProductCardapio />
+        <ProductBebidas />
+        <ProductNossoEspaco />
+      </div>
+    </section>
+  );
+}
+/* Fim de SeeMore.tsx */

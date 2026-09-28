@@ -1,51 +1,21 @@
+/* Grade de destaques da página inicial (sem a nota 5.0 fixa, que não vinha de avaliações reais) */
+import type { MenuItem } from "../data/menu";
+import { brl } from "../lib/site";
+import ProductImage from "./ProductImage";
 
-import React from "react";
-import IconStar from "./Icons/IconStar"
-import Image from 'next/image'
-
-interface PropTypes {
-    products: {
-        sku: string;
-        title: string;
-        main_image: string;
-        availability: boolean;
-    }[];
+export default function ProductBox({ products }: { products: MenuItem[] }) {
+  return (
+    <ul className="grid grid-cols-2 gap-2 px-1">
+      {products.map((p) => (
+        <li key={p.id} className="flex gap-2 bg-white border-2 border-gray-300 p-2.5 rounded-xl shadow-lg text-tahiti-100">
+          <div className="relative w-2/5 min-h-[72px] shrink-0"><ProductImage item={p} sizes="20vw" /></div>
+          <div className="flex-1 flex flex-col justify-between">
+            <h3 className="text-sm font-normal mb-2">{p.title}</h3>
+            <p className="text-sm font-semibold text-[#9a3412]">{brl(p.price)}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
 }
-
-export default function ProductBox({ products }: PropTypes) {
-    return (
-        <section className="grid grid-cols-2 justify-evenly">
-            {products?.map((product: any) => {
-                return (
-                    <div
-                        className="flex mx-1 my-1 bg-white border-2 border-gray-300 p-2.5 rounded-xl tracking-wide shadow-lg text-tahiti-100"
-                        data-sku={product.sku}
-                        key={product.sku}>
-                            <div className="relative flex-initial w-2/5 bg-tahiti-48 rounded-xl">
-                                <Image
-                                    src={product.main_image}
-                                    alt={product.title}
-                                    className="rounded-3xl"
-                                    layout="fill"
-                                />
-                            </div>
-                            <div className="flex-initial w-3/5 flex-col justify-between">
-                                <h4 className="text-xs text-tahiti-54 font-sans font-normal mb-2">{product.title.slice(0, 20)}</h4>
-                                <div className="flex justify-between">
-                                    <div className="flex tahiti-100 leading-tight">
-                                        <IconStar /><p className="ml-1.5 text-xs">5.0</p>
-                                    </div>
-                                    <div className="flex">
-                                        <p className="text-xs">{product.price.toLocaleString("pt-BR", {
-                                            style: "currency",
-                                            currency: "BRL",
-                                        })}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                );
-            })}
-        </section >
-    );
-}
+/* Fim de ProductBox.tsx */

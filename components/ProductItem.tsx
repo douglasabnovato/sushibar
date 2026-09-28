@@ -1,48 +1,23 @@
+/* Lista de itens do cardápio (imagem, nome, descrição e preço) */
+import type { MenuItem } from "../data/menu";
+import { brl } from "../lib/site";
+import ProductImage from "./ProductImage";
 
-import React from "react";
-import Image from 'next/image'
-
-interface PropTypes {
-    products: {
-        sku: string;
-        title: string;
-        main_image: string;
-        availability: boolean;
-    }[];
+export default function ProductItem({ products }: { products: MenuItem[] }) {
+  if (!products.length) return <p className="mx-3 my-6 text-tahiti-56">Nenhum item nesta categoria no momento.</p>;
+  return (
+    <ul className="mx-1">
+      {products.map((p) => (
+        <li key={p.id} className="bg-white border-2 border-gray-300 p-2.5 rounded-xl shadow-lg text-tahiti-100 flex my-2 gap-3">
+          <div className="relative w-2/5 min-h-[96px] shrink-0"><ProductImage item={p} sizes="40vw" /></div>
+          <div className="flex flex-col flex-1">
+            <h3 className="text-lg text-tahiti-100 font-semibold mt-1">{p.title}</h3>
+            <p className="text-gray-700 text-sm mt-1">{p.description}</p>
+            <p className="text-[#9a3412] text-xl font-bold mt-auto self-end">{brl(p.price)}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
 }
-
-export default function ProductItem({ products }: PropTypes) {
-    return (
-        <section className="min-h-screen bg-gray-200  justify-center items-center">
-            {products?.map((product: any) => {
-                return (
-                    <div 
-                     key={product.id}
-                     className="mx-1 bg-white border-2 border-gray-300 p-2.5 rounded-xl tracking-wide shadow-lg text-tahiti-100 flex my-2">
-                        <div className="relative flex-initial w-2/5 bg-tahiti-48 rounded-xl">
-                            <Image
-                                src={product.main_image}
-                                alt={product.title}
-                                className="rounded-3xl"
-                                layout="fill"
-                            />
-                        </div>
-                        <div className="flex flex-col ml-2">
-                            <h4 className="text-xl text-tahiti-54 font-sans font-normal mt-1">{product.title.slice(0, 20)}</h4>
-                            <p className="text-gray-800 mt-1">
-                                {product.description.slice(0, 40)}
-                            </p>
-                            <div className="flex mt-1 justify-between">
-                                <p className="ml-3 text-tahiti-54"></p>
-                                <p className="ml-3 text-tahiti-54 text-2xl">{product.price.toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}</p>
-                            </div>
-                        </div>
-                    </div>
-                );
-            })}
-        </section>
-    )
-}
+/* Fim de ProductItem.tsx */
