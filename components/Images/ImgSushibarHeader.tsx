@@ -4,7 +4,7 @@ import JpgSushibar from '../assets/header-img.jpg'
 const ImgSushibarHeader = () => {
     return (
         <div>
-            <img src={JpgSushibar} alt="image header Sushibar" />
+            <img src={JpgSushibar.src} alt="image header Sushibar" />
         </div>
     );
 };
