@@ -10,6 +10,15 @@
 
 Site mobile-first de um restaurante japonês: destaques, cardápio por categoria, bebidas e a página "Nosso espaço" com reserva pelo WhatsApp. Layout no [Figma](https://www.figma.com/file/UiLvyL3UxGZt15t0IDcP80/Sushibar?node-id=0%3A1&t=zffdeG1GjpNHWrwe-0).
 
+## 🧠 O que aprendi
+
+> Proposta de 01/11/2026, escrita a partir do código e das dependências. Ajuste com a sua experiência.
+
+- Exportar um site estático com Next.js e Pages Router.
+- Ler o cardápio no build, com Supabase opcional e reserva local.
+- Tratar falha externa sem derrubar o build.
+- Testar a montagem do cardápio com Vitest.
+
 ## Publicação
 
 - Fora do ar desde a conferência de 31/10/2026; para ver o projeto, rode localmente (seção "Como executar").
