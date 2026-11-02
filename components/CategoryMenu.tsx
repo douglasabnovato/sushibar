@@ -15,6 +15,7 @@ export default function CategoryMenu({ menu, initialCategoryId }: { menu: Menu; 
         ))}
       </div>
       <div id="painel-categoria" role="tabpanel" aria-live="polite">
+        <h2 className="sr-only">Itens da categoria</h2>
         <ProductItem products={byCategory(menu, current)} />
       </div>
     </>
