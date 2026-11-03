@@ -39,4 +39,20 @@ export const featured = (menu: Menu) => {
   const list = menu.items.filter((i) => i.featured);
   return (list.length ? list : menu.items).slice(0, 4);
 };
+/* Tira acentos e caixa para comparar textos ("Guioza" acha "guiozá") */
+export const normalize = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
+/* Busca no cardápio inteiro por nome ou descrição; com menos de 2 letras, não busca */
+export const searchItems = (menu: Menu, query: string) => {
+  const terms = normalize(query).split(/\s+/).filter(Boolean);
+  if (terms.join("").length < 2) return [];
+  return menu.items.filter((i) => {
+    const text = normalize(`${i.title} ${i.description}`);
+    return terms.every((t) => text.includes(t));
+  });
+};
+
+/* Texto do resultado da busca, lido pelo leitor de tela */
+export const searchSummary = (count: number, query: string) =>
+  count === 0 ? `Nenhum item encontrado para "${query.trim()}".` : `${count} ${count === 1 ? "item encontrado" : "itens encontrados"}.`;
 /* Fim de menu.ts */
