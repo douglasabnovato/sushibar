@@ -19,12 +19,12 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+/* Sem tema escuro: o layout é claro. Antes, no modo escuro do sistema, o texto ficava branco sobre o fundo cinza-claro */
+html {
+  color-scheme: light;
 }
+body {
+  color: #111827;
+  background: #e5e7eb;
+}
+
