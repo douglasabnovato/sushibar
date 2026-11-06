@@ -25,14 +25,28 @@ Site mobile-first de um restaurante japonês: destaques, cardápio por categoria
 - Hospedagem prevista: GitHub Pages (gratuito), publicado pelo GitHub Actions a cada push na `main`
 - Passo a passo: [docs/DEPLOY.md](docs/DEPLOY.md)
 
-## Próximos passos
+## Estado e próximos passos (ciclo de 03/11/2026)
 
-- [ ] Ligar o GitHub Pages ([#10](https://github.com/douglasabnovato/sushibar/issues/10), responsável)
-- [ ] Proteger a `main` ([#11](https://github.com/douglasabnovato/sushibar/issues/11), responsável)
-- [ ] Etiquetas de dieta e alérgenos ([#12](https://github.com/douglasabnovato/sushibar/issues/12))
-- [ ] Testes de interface do cardápio ([#13](https://github.com/douglasabnovato/sushibar/issues/13))
-- [ ] Axe nas 5 páginas no CI ([#14](https://github.com/douglasabnovato/sushibar/issues/14))
-- [ ] Cardápio e WhatsApp: ilustrativos ou reais ([#15](https://github.com/douglasabnovato/sushibar/issues/15), responsável)
+Sem site publicado: o GitHub Pages não está ligado, e `douglasabnovato.github.io/sushibar/` dá 404 em 06/11/2026 ([#10](https://github.com/douglasabnovato/sushibar/issues/10)). Para ver o projeto, rode localmente.
+
+**O que foi feito**
+- Busca no cardápio e setas nas abas, com testes ([#16](https://github.com/douglasabnovato/sushibar/pull/16)).
+- Contraste corrigido no modo escuro do sistema ([#16](https://github.com/douglasabnovato/sushibar/pull/16)).
+- Régua N1 no `docs/MVP.md` e CI também na `developer` ([#16](https://github.com/douglasabnovato/sushibar/pull/16)).
+- Código antigo sem uso removido, incluindo `helpers/translator.ts` ([#7](https://github.com/douglasabnovato/sushibar/pull/7), [#16](https://github.com/douglasabnovato/sushibar/pull/16)).
+- MVP de estudo registrado ([#8](https://github.com/douglasabnovato/sushibar/pull/8)).
+
+**O que queremos fazer**
+- [#10](https://github.com/douglasabnovato/sushibar/issues/10) Publicar o site no GitHub Pages (responsável).
+- [#11](https://github.com/douglasabnovato/sushibar/issues/11) Proteger a `main` exigindo CI verde (responsável).
+- [#15](https://github.com/douglasabnovato/sushibar/issues/15) Decidir se cardápio e WhatsApp continuam ilustrativos (responsável).
+- [#12](https://github.com/douglasabnovato/sushibar/issues/12) Etiquetas de dieta e alérgenos com filtro.
+- [#13](https://github.com/douglasabnovato/sushibar/issues/13) Testes de interface do cardápio.
+- [#14](https://github.com/douglasabnovato/sushibar/issues/14) Axe nas 5 páginas no CI.
+
+**Onde está a documentação**
+- Estado e critérios: [docs/MVP.md](docs/MVP.md).
+- Plano do ciclo: [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md), seção "Ciclo de 03/11/2026".
 
 ## Stack
 
