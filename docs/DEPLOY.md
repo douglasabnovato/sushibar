@@ -25,7 +25,7 @@ Publicar, sem custo e com deploy automático, um site em Next.js 16 (Pages Route
 | Favicon com o prefixo do `basePath` | `pages/_document.tsx` | O `<link rel="icon">` escrito à mão não recebe o prefixo sozinho |
 | `revalidate: 3600` removido do `getStaticProps` | `pages/index.tsx`, `cardapio.tsx`, `bebidas.tsx`, `produtos.tsx` | O build falha com "ISR cannot be used with output: export" (testado). O cardápio passa a ser lido a cada build |
 | Script `start` removido | `package.json` | `next start` não funciona com exportação estática |
-| Job `deploy` no CI, `workflow_dispatch` e variáveis do Supabase no build | `ci/github-actions-ci.yml` → mover para `.github/workflows/ci.yml` | Publicação só na `main`; **Run workflow** refaz o site quando o cardápio do Supabase mudar |
+| Job `deploy` no CI, `workflow_dispatch` e variáveis do Supabase no build | `.github/workflows/ci.yml` (movido de `ci/` em 10/11/2026) | Publicação só na `main`; **Run workflow** refaz o site quando o cardápio do Supabase mudar |
 | Seção "Em produção", stack e publicação atualizadas | `README.md`, `docs/ARQUITETURA.md` | Documentação coerente com a hospedagem |
 
 Verificação feita antes da entrega (já sem os arquivos que o PENDENCIAS manda apagar): `npm ci` limpo, 4 testes passando, `next build` gerando `out/` com as 5 páginas, `npm audit --omit=dev` com 0 vulnerabilidades, e navegação real no Chromium servindo `out/` em `/sushibar/`: as 5 páginas respondem 200, o menu navega entre Início, Cardápio, Bebidas e Nosso espaço, as abas de categoria trocam os itens, nenhuma imagem quebrada, console sem erros.
@@ -58,6 +58,8 @@ Verificação feita antes da entrega (já sem os arquivos que o PENDENCIAS manda
 6. Opcional com Supabase: criar `.env.local` a partir do `.env.example` e rodar `npm run dev`.
 
 ### Etapa 2 · Subir para o GitHub (branch `main`)
+
+> Atualização de 10/11/2026: o workflow já está em `.github/workflows/ci.yml`, e a `main` só recebe mudanças por PR. Resta a etapa 3 (ligar o Pages) e o responsável mesclar o PR da sprint na `main`. Os passos abaixo ficam como histórico.
 
 1. Ativar o CI (a pasta `.github` é protegida para a ferramenta que preparou o projeto, então o arquivo veio em `ci/`; as imagens que já estão em `.github/` continuam lá):
    `mkdir -p .github/workflows && mv ci/github-actions-ci.yml .github/workflows/ci.yml && rmdir ci`
