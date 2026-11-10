@@ -1,4 +1,4 @@
-# Verificação de projeto de estudo: não publica nada
+# CI: testes e build do Next.js (exportação estática em out/) em PR e push; publicação no GitHub Pages só na main, depois do build verde
 name: CI
 
 on:
@@ -6,6 +6,8 @@ on:
     branches: [main, "developer/**"]
   pull_request:
     branches: [main, "developer/**"]
+  # "Run workflow" na main refaz o site quando o cardápio do Supabase mudar
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,9 +15,6 @@ permissions:
 jobs:
   raiz:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,3 +25,29 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      # Artefato do Pages só na main (push ou "Run workflow")
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        with:
+          path: out
+
+  # Publicação: só na main e só depois do job raiz verde
+  deploy:
+    needs: raiz
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

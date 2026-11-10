@@ -4,9 +4,11 @@
 
 **Nível:** Estudo (N1). Os critérios 5 e 7 não se aplicam e saem da conta.
 
-**Finalizado:** sim. Todos os critérios aplicáveis atendem, menos o 10, que depende do responsável e tem a issue #11 (`depende-do-responsavel`).
+**Resumo:** 10 de 10 aplicáveis atendidos
 
-## 1. Critérios: 9 de 10 aplicáveis atendidos
+**Finalizado:** sim. Todos os critérios aplicáveis atendem. O 10 passou a "Atende" em 10/11/2026, com a `main` protegida pelo ruleset `principal-protegida` (#11). Ligar o Pages segue com o responsável (#10); o workflow de publicação já está pronto.
+
+## 1. Critérios: 10 de 10 aplicáveis atendidos
 
 | # | Critério | Como verificar | Situação em 03/11/2026 | Evidência |
 |---|---|---|---|---|
@@ -19,7 +21,7 @@
 | 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não se aplica (N1) | Site fora do ar (#10) |
 | 8 | Acessibilidade básica | axe e teclado | Atende | axe sem violações em 02/11; abas com setas no padrão APG; busca com rótulo e resultado anunciado; contraste corrigido no modo escuro do sistema (03/11) |
 | 9 | Segurança e conformidade | Riscos decididos | Atende | Sem segredo no código; saíram os dados raspados da Target (`helpers/translator.ts`) em 03/11 |
-| 10 | Entrega confiável | CI verde antes de entrar na principal | Parcial: CI verde nos PRs, também na `developer`; a `main` segue sem proteção | #11 (responsável) |
+| 10 | Entrega confiável | CI verde antes de entrar na principal | Atende (10/11/2026) | `gh api repos/douglasabnovato/sushibar/rulesets`, em 10/11/2026: ruleset `principal-protegida` ativo (exige PR, bloqueia force push e exclusão); workflow `CI` roda nos PRs para `main` e `developer/**` (#11) |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende | 12 testes: cardápio, busca e abas |
 | 12 | Documentação honesta | O README ensina a rodar | Atende | Comandos conferidos com o `package.json`; sem link quebrado; próximos passos (03/11) |
 
