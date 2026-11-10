@@ -1,4 +1,4 @@
-> **Projeto de estudo (N1).** Estado conferido em 03/11/2026: 9 de 10 critérios aplicáveis atendidos, MVP finalizado. O site ainda não está no ar (#10). Detalhes em [docs/MVP.md](docs/MVP.md) e plano do ciclo em [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md).
+> **Projeto de estudo (N1).** Estado conferido em 10/11/2026: 10 de 10 critérios aplicáveis atendidos, MVP finalizado; a `main` está protegida e só recebe mudanças por PR. O site ainda não está no ar (#10). Detalhes em [docs/MVP.md](docs/MVP.md) e plano do ciclo em [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md).
 
 <h4 align="center">
 	🍣 Sushibar 🚀
@@ -30,6 +30,7 @@ Site mobile-first de um restaurante japonês: destaques, cardápio por categoria
 Sem site publicado: o GitHub Pages não está ligado, e `douglasabnovato.github.io/sushibar/` dá 404 em 06/11/2026 ([#10](https://github.com/douglasabnovato/sushibar/issues/10)). Para ver o projeto, rode localmente.
 
 **O que foi feito**
+- `main` protegida pelo ruleset `principal-protegida` (critério 10 atende) e workflow único com publicação no Pages só na `main` (10/11/2026).
 - Busca no cardápio e setas nas abas, com testes ([#16](https://github.com/douglasabnovato/sushibar/pull/16)).
 - Contraste corrigido no modo escuro do sistema ([#16](https://github.com/douglasabnovato/sushibar/pull/16)).
 - Régua N1 no `docs/MVP.md` e CI também na `developer` ([#16](https://github.com/douglasabnovato/sushibar/pull/16)).
@@ -38,7 +39,6 @@ Sem site publicado: o GitHub Pages não está ligado, e `douglasabnovato.github.
 
 **O que queremos fazer**
 - [#10](https://github.com/douglasabnovato/sushibar/issues/10) Publicar o site no GitHub Pages (responsável).
-- [#11](https://github.com/douglasabnovato/sushibar/issues/11) Proteger a `main` exigindo CI verde (responsável).
 - [#15](https://github.com/douglasabnovato/sushibar/issues/15) Decidir se cardápio e WhatsApp continuam ilustrativos (responsável).
 - [#12](https://github.com/douglasabnovato/sushibar/issues/12) Etiquetas de dieta e alérgenos com filtro.
 - [#13](https://github.com/douglasabnovato/sushibar/issues/13) Testes de interface do cardápio.
