@@ -1,4 +1,4 @@
-> **Projeto de estudo (N1).** Estado conferido em 16/11/2026: 9 de 10 critérios aplicáveis atendidos, com teste no navegador e axe no CI; MVP finalizado (o 9 fica Parcial até o responsável ligar os alertas do Dependabot, #25). O site ainda não está no ar (#10). Detalhes em [docs/MVP.md](docs/MVP.md) e plano do ciclo em [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md).
+> **Projeto de estudo (N1).** Estado conferido em 16/11/2026: 10 de 10 critérios aplicáveis atendidos, com teste no navegador e axe no CI; MVP finalizado. Os alertas do Dependabot estão ligados, com 0 abertos em 16/11/2026. O site ainda não está no ar (#10). Detalhes em [docs/MVP.md](docs/MVP.md) e plano do ciclo em [docs/PLANO-DE-ACAO.md](docs/PLANO-DE-ACAO.md).
 
 <h4 align="center">
 	🍣 Sushibar 🚀
@@ -39,7 +39,7 @@ Sem site publicado: o GitHub Pages não está ligado, e `douglasabnovato.github.
 **O que queremos fazer**
 - [#10](https://github.com/douglasabnovato/sushibar/issues/10) Publicar o site no GitHub Pages (responsável).
 - [#24](https://github.com/douglasabnovato/sushibar/issues/24) Exigir o job `e2e` no ruleset da `main` (responsável).
-- [#25](https://github.com/douglasabnovato/sushibar/issues/25) Ligar os alertas do Dependabot (responsável).
+- [#25](https://github.com/douglasabnovato/sushibar/issues/25) Alertas do Dependabot: ligados em 16/11/2026, com 0 abertos; a evidência está na issue, e fechá-la é do responsável.
 - [#15](https://github.com/douglasabnovato/sushibar/issues/15) Decidir se cardápio e WhatsApp continuam ilustrativos (responsável).
 - [#26](https://github.com/douglasabnovato/sushibar/issues/26) Página 404 em português com o menu.
 - [#28](https://github.com/douglasabnovato/sushibar/issues/28) Teclado na página inicial e no Nosso espaço.
