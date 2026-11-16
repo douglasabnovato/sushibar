@@ -1,4 +1,4 @@
-/* Cabeçalho com a arte do Sushibar e navegação principal (antes importava "next/Image", que quebra no Linux) */
+/* Cabeçalho com a arte do Sushibar, link de pular para o conteúdo e navegação principal (antes importava "next/Image", que quebra no Linux) */
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +16,7 @@ export default function Header({ title, hero = false }: { title: string; hero?: 
         <meta name="description" content={site.description} />
       </Head>
       <header>
+        <a href="#conteudo" className="pular-conteudo">Pular para o conteúdo</a>
         <nav aria-label="Principal" className="bg-tahiti-100 text-white">
           <ul className="flex flex-wrap gap-x-4 gap-y-1 px-3 py-2 text-sm">
             {LINKS.map(([href, label]) => <li key={href}><Link href={href} className="inline-block px-1 py-2 min-w-[44px] text-center underline-offset-4 hover:underline">{label}</Link></li>)}

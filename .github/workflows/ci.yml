@@ -1,4 +1,4 @@
-# Verificação de projeto de estudo: não publica nada
+# CI: testes e build do Next.js (exportação estática em out/) e teste no navegador (Playwright + axe) em PR e push; publicação no GitHub Pages só na main, depois dos dois jobs verdes e com a variável PAGES_VIA_ACTIONS=true
 name: CI
 
 on:
@@ -6,6 +6,8 @@ on:
     branches: [main, "developer/**"]
   pull_request:
     branches: [main, "developer/**"]
+  # "Run workflow" na main refaz o site quando o cardápio do Supabase mudar
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,9 +15,7 @@ permissions:
 jobs:
   raiz:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,3 +26,52 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      # Artefato do Pages só na main (push ou "Run workflow") e com o Pages ligado pelo responsável
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.PAGES_VIA_ACTIONS == 'true'
+        with:
+          path: out
+
+  # Fluxo principal no navegador, com axe nas 5 páginas, teclado e uma checagem com o sistema em modo escuro (o app não tem tema escuro próprio)
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Build com o cardápio local (data/menu.ts), para o teste não depender do Supabase
+      - run: npm run build
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-trace
+          path: test-results
+          retention-days: 7
+
+  # Publicação: só na main, depois dos jobs verdes, e só com a variável PAGES_VIA_ACTIONS=true (criada pelo responsável ao ligar o Pages)
+  deploy:
+    needs: [raiz, e2e]
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.PAGES_VIA_ACTIONS == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

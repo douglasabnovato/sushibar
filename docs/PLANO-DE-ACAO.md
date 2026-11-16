@@ -76,3 +76,64 @@ Timebox: 45 min.
 5. Régua N1 no `MVP.md`; README com próximos passos e sem link quebrado.
 
 **Vira issue.** #10, #11 e #15 (responsável); #12, #13 e #14 (agente).
+
+## Ciclo de 16/11/2026
+
+> Branch `feature/2026-11-16` → `developer/sprint-2026-11-12` (o PR #21 para a `main` segue aberto) → `main`. Nível: Estudo (N1), 10 critérios aplicáveis.
+
+### Produto
+
+**Problema e público.** Quem visita o site de um restaurante japonês quer achar um prato e o preço no celular, também pelo teclado. Para o autor, é um estudo de Next.js com exportação estática.
+
+**Hipótese e meta.** Acreditamos que a busca e as abas com setas deixam achar o preço de um prato em até 2 ações (2 cliques, ou digitar parte do nome). Saberemos quando um teste no navegador, no CI, achar o preço de "salmão" pela busca e trocar de categoria pelo teclado, sem violação do axe.
+
+**O que a análise achou.** O `docs/MVP.md` dizia 10 de 10, mas quatro "Atende" não tinham a evidência que a régua pede: o critério 3 não tinha teste no navegador no CI, o 8 se apoiava num axe manual de 02/11, o 2 não tinha o "saberemos quando" e o 9 não citava o comando do audit. Além disso, o job `deploy` falharia na `main` até o Pages ser ligado (#10).
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| axe dentro do teste do Playwright | `@axe-core/playwright` roda na página aberta pelo teste e devolve as violações; filtrar pelas tags WCAG A e AA | [Playwright: testes de acessibilidade](https://playwright.dev/docs/accessibility-testing) |
+| Modo escuro do sistema emulado | `page.emulateMedia({ colorScheme: "dark" })` emula `prefers-color-scheme`. O app não tem tema escuro próprio (força o claro), então o teste só confere que a tela segue clara e legível, como guarda do defeito de 03/11 | [Playwright: emulação](https://playwright.dev/docs/emulation) |
+| Servidor do teste | `webServer` do Playwright sobe o servidor antes dos testes; aqui ele serve o `out/` em `/sushibar`, como o Pages | [Playwright: servidor web](https://playwright.dev/docs/test-webserver) |
+| Link "Pular para o conteúdo" | Um link no topo, visível ao receber foco, leva direto ao conteúdo principal e evita passar pelo menu em cada página | [W3C: técnica G1 da WCAG](https://www.w3.org/WAI/WCAG22/Techniques/general/G1) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | Patch e minor das dependências de produção | Alto | Baixo | Este ciclo |
+| 2 | Job `deploy` travado por variável até o Pages ser ligado | Alto | Baixo | Este ciclo |
+| 3 | Teste Playwright do fluxo principal com axe nas 5 páginas e job `e2e` no CI | Alto | Médio | Este ciclo (#14) |
+| 4 | Link "Pular para o conteúdo", com teste de teclado | Médio | Baixo | Este ciclo |
+| 5 | `MVP.md` com evidência de comando, data e resultado em cada "Atende" | Alto | Baixo | Este ciclo |
+| 5a | Testes de falha do Supabase (erro, rede fora, tabela vazia) | Médio | Baixo | Este ciclo |
+| 5b | Remover 12 arquivos sem uso que o `DEPLOY.md` já mandava apagar | Baixo | Baixo | Este ciclo |
+| 6 | Ligar o Pages e criar a variável | Alto | Baixo | Responsável (#10) |
+| 7 | Exigir o job `e2e` no ruleset | Médio | Baixo | Responsável (#24) |
+| 8 | Etiquetas de dieta e alérgenos | Médio | Médio | Issue (#12) |
+| 9 | Testes de componente com jsdom | Médio | Médio | Issue (#13) |
+
+**Fora do escopo.** Pedido e pagamento, medição de uso, migrar para o App Router.
+
+### Engenharia
+
+**Arquitetura.** Sem mudança: Next.js 16 com Pages Router e exportação estática (`out/`, `basePath` `/sushibar`). O teste de ponta a ponta serve o `out/` dentro de uma pasta `sushibar/`, para as URLs baterem com as do Pages.
+
+**Riscos.**
+- O `playwright install` no `ubuntu-latest` pode demorar; o job `e2e` instala só o Chromium.
+- Sem a variável `PAGES_VIA_ACTIONS`, o site não é publicado mesmo com o Pages ligado; o `DEPLOY.md` e a #10 dizem isso.
+
+**Qualidade.**
+- Testes: o Vitest vai de 12 para 15 (falhas do Supabase); entram 9 testes do Playwright (fluxo, axe nas 5 páginas, teclado, sistema em modo escuro e 404).
+- Acessibilidade: axe sem violações WCAG A e AA, foco visível e link de pular.
+- Desempenho: não se aplica (N1).
+- Segurança: `npm audit --omit=dev` com 0 vulnerabilidades; sem segredo no código.
+
+**Definição de pronto.** `npm test`, `npm run build` e `npm run test:e2e` passam localmente; CI verde (jobs `raiz` e `e2e`) no PR para a sprint; `docs/MVP.md`, README e `DEPLOY.md` atualizados.
+
+### Plano de ação
+
+**Este ciclo executa.** Itens 1 a 5b do backlog.
+
+**Vira issue.** Com o responsável: #10 (Pages), #15 (dados ilustrativos), #24 (exigir o `e2e`) e #25 (alertas do Dependabot). Do agente: #12 e #13 seguem; novas #26 (página 404 em português), #27 (Tailwind e TypeScript na versão maior) e #28 (teclado na página inicial e no Nosso espaço).
