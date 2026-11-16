@@ -83,9 +83,9 @@ Timebox: 45 min.
 
 ### Produto
 
-**Problema e público.** Quem visita o site de um restaurante japonês quer achar um prato e o preço no celular, também pelo teclado e com o sistema em modo escuro. Para o autor, é um estudo de Next.js com exportação estática.
+**Problema e público.** Quem visita o site de um restaurante japonês quer achar um prato e o preço no celular, também pelo teclado. Para o autor, é um estudo de Next.js com exportação estática.
 
-**Hipótese e meta.** Acreditamos que a busca e as abas com setas deixam achar o preço de um prato em até 2 ações (2 cliques, ou digitar parte do nome). Saberemos quando um teste no navegador, no CI, achar o preço de "salmão" pela busca e trocar de categoria pelo teclado, sem violação do axe nos temas claro e escuro.
+**Hipótese e meta.** Acreditamos que a busca e as abas com setas deixam achar o preço de um prato em até 2 ações (2 cliques, ou digitar parte do nome). Saberemos quando um teste no navegador, no CI, achar o preço de "salmão" pela busca e trocar de categoria pelo teclado, sem violação do axe.
 
 **O que a análise achou.** O `docs/MVP.md` dizia 10 de 10, mas três "Atende" não tinham a evidência que a régua pede: o critério 3 não tinha teste no navegador no CI, o 8 se apoiava num axe manual de 02/11 e o 2 não tinha o "saberemos quando". Além disso, o job `deploy` falharia na `main` até o Pages ser ligado (#10).
 
@@ -94,7 +94,7 @@ Timebox: 45 min.
 | Ideia | O que levamos para o projeto | Fonte |
 |---|---|---|
 | axe dentro do teste do Playwright | `@axe-core/playwright` roda na página aberta pelo teste e devolve as violações; filtrar pelas tags WCAG A e AA | [Playwright: testes de acessibilidade](https://playwright.dev/docs/accessibility-testing) |
-| Tema escuro emulado | `colorScheme: "dark"` no projeto do Playwright emula `prefers-color-scheme`; o mesmo teste roda nos dois temas | [Playwright: emulação](https://playwright.dev/docs/emulation) |
+| Modo escuro do sistema emulado | `page.emulateMedia({ colorScheme: "dark" })` emula `prefers-color-scheme`. O app não tem tema escuro próprio (força o claro), então o teste só confere que a tela segue clara e legível, como guarda do defeito de 03/11 | [Playwright: emulação](https://playwright.dev/docs/emulation) |
 | Servidor do teste | `webServer` do Playwright sobe o servidor antes dos testes; aqui ele serve o `out/` em `/sushibar`, como o Pages | [Playwright: servidor web](https://playwright.dev/docs/test-webserver) |
 | Link "Pular para o conteúdo" | Um link no topo, visível ao receber foco, leva direto ao conteúdo principal e evita passar pelo menu em cada página | [W3C: técnica G1 da WCAG](https://www.w3.org/WAI/WCAG22/Techniques/general/G1) |
 
@@ -104,11 +104,13 @@ Timebox: 45 min.
 |---|---|---|---|---|
 | 1 | Patch e minor das dependências de produção | Alto | Baixo | Este ciclo |
 | 2 | Job `deploy` travado por variável até o Pages ser ligado | Alto | Baixo | Este ciclo |
-| 3 | Teste Playwright do fluxo principal com axe nos dois temas, nas 5 páginas, e job `e2e` no CI | Alto | Médio | Este ciclo (#14) |
+| 3 | Teste Playwright do fluxo principal com axe nas 5 páginas e job `e2e` no CI | Alto | Médio | Este ciclo (#14) |
 | 4 | Link "Pular para o conteúdo", com teste de teclado | Médio | Baixo | Este ciclo |
 | 5 | `MVP.md` com evidência de comando, data e resultado em cada "Atende" | Alto | Baixo | Este ciclo |
+| 5a | Testes de falha do Supabase (erro, rede fora, tabela vazia) | Médio | Baixo | Este ciclo |
+| 5b | Remover 13 arquivos sem uso que o `DEPLOY.md` já mandava apagar | Baixo | Baixo | Este ciclo |
 | 6 | Ligar o Pages e criar a variável | Alto | Baixo | Responsável (#10) |
-| 7 | Exigir o job `e2e` no ruleset | Médio | Baixo | Responsável (issue nova) |
+| 7 | Exigir o job `e2e` no ruleset | Médio | Baixo | Responsável (#24) |
 | 8 | Etiquetas de dieta e alérgenos | Médio | Médio | Issue (#12) |
 | 9 | Testes de componente com jsdom | Médio | Médio | Issue (#13) |
 
@@ -123,7 +125,7 @@ Timebox: 45 min.
 - Sem a variável `PAGES_VIA_ACTIONS`, o site não é publicado mesmo com o Pages ligado; o `DEPLOY.md` e a #10 dizem isso.
 
 **Qualidade.**
-- Testes: os 12 do Vitest seguem; entram os testes do Playwright (fluxo, axe nas 5 páginas em claro e escuro, teclado).
+- Testes: o Vitest vai de 12 para 15 (falhas do Supabase); entram 9 testes do Playwright (fluxo, axe nas 5 páginas, teclado, sistema em modo escuro e 404).
 - Acessibilidade: axe sem violações WCAG A e AA, foco visível e link de pular.
 - Desempenho: não se aplica (N1).
 - Segurança: `npm audit --omit=dev` com 0 vulnerabilidades; sem segredo no código.
@@ -132,6 +134,6 @@ Timebox: 45 min.
 
 ### Plano de ação
 
-**Este ciclo executa.** Itens 1 a 5 do backlog.
+**Este ciclo executa.** Itens 1 a 5b do backlog.
 
-**Vira issue.** #10 e #15 seguem com o responsável; issue nova para exigir o `e2e` no ruleset; #12 e #13 seguem; issues novas para o teste de teclado do menu, para o Lighthouse quando o site subir e para o tamanho das imagens.
+**Vira issue.** Com o responsável: #10 (Pages), #15 (dados ilustrativos), #24 (exigir o `e2e`) e #25 (alertas do Dependabot). Do agente: #12 e #13 seguem; novas #26 (página 404 em português), #27 (Tailwind e TypeScript na versão maior) e #28 (teclado na página inicial e no Nosso espaço).
