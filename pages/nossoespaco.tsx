@@ -10,7 +10,7 @@ export default function NossoEspaco() {
   return (
     <>
       <Header title="Nosso espaço" />
-      <main className="min-h-screen">
+      <main id="conteudo" tabIndex={-1} className="min-h-screen">
         <section className="bg-tahiti-46 pb-5" aria-labelledby="lounge">
           <h1 id="lounge" className="text-tahiti-100 font-bold px-5 pt-4 text-2xl">Lounge Sushibar</h1>
           <p className="text-sm text-tahiti-100 px-5 pt-2 pb-6">

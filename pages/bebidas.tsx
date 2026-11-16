@@ -8,7 +8,7 @@ export default function Bebidas({ menu, drinksId }: InferGetStaticPropsType<type
   return (
     <>
       <Header title="Bebidas" />
-      <main className="min-h-screen bg-gray-200 pt-3 pb-6">
+      <main id="conteudo" tabIndex={-1} className="min-h-screen bg-gray-200 pt-3 pb-6">
         <h1 className="mx-3 mb-2 text-2xl font-bold">Bebidas</h1>
         <CategoryMenu menu={menu} initialCategoryId={drinksId} />
       </main>

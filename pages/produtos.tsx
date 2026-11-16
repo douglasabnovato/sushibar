@@ -8,7 +8,7 @@ export default function Produtos({ menu }: InferGetStaticPropsType<typeof getSta
   return (
     <>
       <Header title="Produtos" />
-      <main className="min-h-screen bg-gray-200 pt-3 pb-6">
+      <main id="conteudo" tabIndex={-1} className="min-h-screen bg-gray-200 pt-3 pb-6">
         <h1 className="mx-3 mb-2 text-2xl font-bold">Todos os produtos</h1>
         <Product menu={menu} />
       </main>

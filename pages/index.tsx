@@ -9,7 +9,7 @@ export default function Home({ menu }: InferGetStaticPropsType<typeof getStaticP
   return (
     <>
       <Header title="Sushibar" hero />
-      <main className="min-h-screen bg-gray-200 pt-3 pb-6">
+      <main id="conteudo" tabIndex={-1} className="min-h-screen bg-gray-200 pt-3 pb-6">
         <h1 className="sr-only">Sushibar — culinária japonesa</h1>
         <SpecialOffers products={featured(menu)} />
         <SeeMore />
