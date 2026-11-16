@@ -87,6 +87,7 @@ test("com o sistema em modo escuro, o cardápio segue claro e sem violações", 
 test("rota que não existe mostra a página 404 do site", async ({ page }) => {
   const resposta = await page.goto("nao-existe/");
   expect(resposta?.status()).toBe(404);
-  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "404" })).toBeVisible();
+  await expect(page).toHaveTitle(/404/);
 });
 /* Fim de fluxo.e2e.ts */

@@ -29,7 +29,7 @@ body {
 }
 
 
-/* Foco visível em tudo que recebe teclado; o azul passa de 3:1 sobre o preto do menu e sobre o cinza-claro do conteúdo */
+/* Foco visível em tudo que recebe teclado; o azul #1d4ed8 dá cerca de 3,1:1 sobre o preto do menu (no limite: não clarear o menu nem escurecer o azul) e 4,6:1 sobre o cinza-claro do conteúdo */
 :focus-visible {
   outline: 3px solid #1d4ed8;
   outline-offset: 2px;

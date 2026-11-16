@@ -29,7 +29,7 @@ Publicar, sem custo e com deploy automático, um site em Next.js 16 (Pages Route
 | Job `deploy` só com a variável `PAGES_VIA_ACTIONS=true` e depois dos jobs `raiz` e `e2e` | `.github/workflows/ci.yml` (16/11/2026) | Sem o Pages ligado, o deploy falharia e deixaria a `main` vermelha; a variável liga a publicação junto com o Pages |
 | Seção "Em produção", stack e publicação atualizadas | `README.md`, `docs/ARQUITETURA.md` | Documentação coerente com a hospedagem |
 
-Verificação feita em 01/11/2026, antes da entrega (já sem os arquivos que o PENDENCIAS manda apagar): `npm ci` limpo, 4 testes passando, `next build` gerando `out/` com as 5 páginas, `npm audit --omit=dev` com 0 vulnerabilidades, e navegação real no Chromium servindo `out/` em `/sushibar/`: as 5 páginas respondem 200, o menu navega entre Início, Cardápio, Bebidas e Nosso espaço, as abas de categoria trocam os itens, nenhuma imagem quebrada, console sem erros.
+Verificação feita antes da entrega (registro antigo, sem data; a verificação atual está na Etapa 1) (já sem os arquivos que o PENDENCIAS manda apagar): `npm ci` limpo, 4 testes passando, `next build` gerando `out/` com as 5 páginas, `npm audit --omit=dev` com 0 vulnerabilidades, e navegação real no Chromium servindo `out/` em `/sushibar/`: as 5 páginas respondem 200, o menu navega entre Início, Cardápio, Bebidas e Nosso espaço, as abas de categoria trocam os itens, nenhuma imagem quebrada, console sem erros.
 
 ### Limitações do plano gratuito
 
@@ -83,6 +83,7 @@ Verificação feita em 01/11/2026, antes da entrega (já sem os arquivos que o P
 5. **Reservar pelo WhatsApp** abre `wa.me` com a mensagem de reserva.
 6. F12 → Console e Network: nenhum erro nem arquivo 404 (o favicon carrega).
 7. Com Supabase: o log do job `raiz`, no passo de build, não mostra "usando o cardápio local".
+8. Atenção: o job `e2e` testa o build com o cardápio local. Com o Supabase ligado, o cardápio publicado não passa pelo axe; conferir à mão os itens 3 e 6.
 
 ### Etapa 5 · Fechar
 

@@ -87,7 +87,7 @@ Timebox: 45 min.
 
 **Hipótese e meta.** Acreditamos que a busca e as abas com setas deixam achar o preço de um prato em até 2 ações (2 cliques, ou digitar parte do nome). Saberemos quando um teste no navegador, no CI, achar o preço de "salmão" pela busca e trocar de categoria pelo teclado, sem violação do axe.
 
-**O que a análise achou.** O `docs/MVP.md` dizia 10 de 10, mas três "Atende" não tinham a evidência que a régua pede: o critério 3 não tinha teste no navegador no CI, o 8 se apoiava num axe manual de 02/11 e o 2 não tinha o "saberemos quando". Além disso, o job `deploy` falharia na `main` até o Pages ser ligado (#10).
+**O que a análise achou.** O `docs/MVP.md` dizia 10 de 10, mas quatro "Atende" não tinham a evidência que a régua pede: o critério 3 não tinha teste no navegador no CI, o 8 se apoiava num axe manual de 02/11, o 2 não tinha o "saberemos quando" e o 9 não citava o comando do audit. Além disso, o job `deploy` falharia na `main` até o Pages ser ligado (#10).
 
 **O que a pesquisa trouxe.**
 
@@ -108,7 +108,7 @@ Timebox: 45 min.
 | 4 | Link "Pular para o conteúdo", com teste de teclado | Médio | Baixo | Este ciclo |
 | 5 | `MVP.md` com evidência de comando, data e resultado em cada "Atende" | Alto | Baixo | Este ciclo |
 | 5a | Testes de falha do Supabase (erro, rede fora, tabela vazia) | Médio | Baixo | Este ciclo |
-| 5b | Remover 13 arquivos sem uso que o `DEPLOY.md` já mandava apagar | Baixo | Baixo | Este ciclo |
+| 5b | Remover 12 arquivos sem uso que o `DEPLOY.md` já mandava apagar | Baixo | Baixo | Este ciclo |
 | 6 | Ligar o Pages e criar a variável | Alto | Baixo | Responsável (#10) |
 | 7 | Exigir o job `e2e` no ruleset | Médio | Baixo | Responsável (#24) |
 | 8 | Etiquetas de dieta e alérgenos | Médio | Médio | Issue (#12) |

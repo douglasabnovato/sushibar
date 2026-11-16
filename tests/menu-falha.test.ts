@@ -1,5 +1,5 @@
 /* Falhas do Supabase no build: erro na consulta ou rede fora do ar caem no cardápio local, sem derrubar o build */
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { loadMenu } from "../lib/menu";
 
 /* vi.mock sobe para o topo; a consulta falsa vem de vi.hoisted */
@@ -10,6 +10,7 @@ const ENV = { NEXT_PUBLIC_SUPABASE_URL: "https://exemplo.supabase.co", NEXT_PUBL
 
 describe("cardápio com o Supabase falhando", () => {
   beforeEach(() => { consulta.mockReset(); vi.spyOn(console, "warn").mockImplementation(() => {}); });
+  afterEach(() => { vi.restoreAllMocks(); });
 
   it("erro na consulta usa o cardápio local e avisa no log", async () => {
     consulta.mockResolvedValue({ data: null, error: { message: "permission denied" } });
@@ -30,6 +31,7 @@ describe("cardápio com o Supabase falhando", () => {
     const menu = await loadMenu(ENV);
     expect(menu.source).toBe("local");
     expect(menu.items.length).toBeGreaterThan(0);
+    expect(console.warn).toHaveBeenCalledWith("Supabase indisponível; usando o cardápio local.");
   });
 });
 /* Fim de menu-falha.test.ts */

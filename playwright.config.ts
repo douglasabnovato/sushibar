@@ -7,7 +7,7 @@ export default defineConfig({
   testDir: "e2e",
   testMatch: /.*\.e2e\.ts$/,
   timeout: 60_000,
-  retries: process.env.CI ? 1 : 0,
+  retries: 0,
   reporter: [["list"]],
   use: { baseURL: `http://localhost:${PORTA}/sushibar/`, trace: "retain-on-failure", reducedMotion: "reduce" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"], colorScheme: "light" } }],

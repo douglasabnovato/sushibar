@@ -15,6 +15,7 @@ permissions:
 jobs:
   raiz:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -34,9 +35,10 @@ jobs:
         with:
           path: out
 
-  # Fluxo principal no navegador, com axe nas 5 páginas nos temas claro e escuro e teste de teclado
+  # Fluxo principal no navegador, com axe nas 5 páginas, teclado e uma checagem com o sistema em modo escuro (o app não tem tema escuro próprio)
   e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

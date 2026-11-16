@@ -30,7 +30,7 @@ Site mobile-first de um restaurante japonês: destaques, cardápio por categoria
 Sem site publicado: o GitHub Pages não está ligado, e `douglasabnovato.github.io/sushibar/` dá 404 em 16/11/2026 ([#10](https://github.com/douglasabnovato/sushibar/issues/10)). Para ver o projeto, rode localmente.
 
 **O que foi feito**
-- Teste no navegador (Playwright) do fluxo principal, com axe nas 5 páginas e teste de teclado, no job `e2e` do CI; link "Pular para o conteúdo" e foco visível; testes de falha do Supabase; 13 arquivos sem uso removidos; dependências de produção em patch e minor; publicação travada por variável até o Pages ser ligado ([#23](https://github.com/douglasabnovato/sushibar/pull/23)).
+- Teste no navegador (Playwright) do fluxo principal, com axe nas 5 páginas e teste de teclado, no job `e2e` do CI; link "Pular para o conteúdo" e foco visível; testes de falha do Supabase; 12 arquivos sem uso removidos; dependências de produção em patch e minor; publicação travada por variável até o Pages ser ligado ([#23](https://github.com/douglasabnovato/sushibar/pull/23)).
 - `main` protegida pelo ruleset `principal-protegida` e workflow único com publicação no Pages só na `main` ([#20](https://github.com/douglasabnovato/sushibar/pull/20)).
 - Busca no cardápio, setas nas abas e contraste corrigido no modo escuro do sistema ([#16](https://github.com/douglasabnovato/sushibar/pull/16)).
 - Código antigo sem uso removido, incluindo `helpers/translator.ts` ([#7](https://github.com/douglasabnovato/sushibar/pull/7), [#16](https://github.com/douglasabnovato/sushibar/pull/16)).
@@ -44,7 +44,7 @@ Sem site publicado: o GitHub Pages não está ligado, e `douglasabnovato.github.
 - [#26](https://github.com/douglasabnovato/sushibar/issues/26) Página 404 em português com o menu.
 - [#28](https://github.com/douglasabnovato/sushibar/issues/28) Teclado na página inicial e no Nosso espaço.
 - [#12](https://github.com/douglasabnovato/sushibar/issues/12) Etiquetas de dieta e alérgenos com filtro.
-- [#13](https://github.com/douglasabnovato/sushibar/issues/13) Testes de componente do cardápio.
+- [#13](https://github.com/douglasabnovato/sushibar/issues/13) Testes de interface do cardápio.
 - [#27](https://github.com/douglasabnovato/sushibar/issues/27) Tailwind e TypeScript na versão maior.
 
 **Onde está a documentação**
