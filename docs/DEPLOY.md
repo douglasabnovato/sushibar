@@ -26,9 +26,10 @@ Publicar, sem custo e com deploy automático, um site em Next.js 16 (Pages Route
 | `revalidate: 3600` removido do `getStaticProps` | `pages/index.tsx`, `cardapio.tsx`, `bebidas.tsx`, `produtos.tsx` | O build falha com "ISR cannot be used with output: export" (testado). O cardápio passa a ser lido a cada build |
 | Script `start` removido | `package.json` | `next start` não funciona com exportação estática |
 | Job `deploy` no CI, `workflow_dispatch` e variáveis do Supabase no build | `.github/workflows/ci.yml` (movido de `ci/` em 10/11/2026) | Publicação só na `main`; **Run workflow** refaz o site quando o cardápio do Supabase mudar |
+| Job `deploy` só com a variável `PAGES_VIA_ACTIONS=true` e depois dos jobs `raiz` e `e2e` | `.github/workflows/ci.yml` (16/11/2026) | Sem o Pages ligado, o deploy falharia e deixaria a `main` vermelha; a variável liga a publicação junto com o Pages |
 | Seção "Em produção", stack e publicação atualizadas | `README.md`, `docs/ARQUITETURA.md` | Documentação coerente com a hospedagem |
 
-Verificação feita antes da entrega (já sem os arquivos que o PENDENCIAS manda apagar): `npm ci` limpo, 4 testes passando, `next build` gerando `out/` com as 5 páginas, `npm audit --omit=dev` com 0 vulnerabilidades, e navegação real no Chromium servindo `out/` em `/sushibar/`: as 5 páginas respondem 200, o menu navega entre Início, Cardápio, Bebidas e Nosso espaço, as abas de categoria trocam os itens, nenhuma imagem quebrada, console sem erros.
+Verificação feita antes da entrega (registro antigo, sem data; a verificação atual está na Etapa 1) (já sem os arquivos que o PENDENCIAS manda apagar): `npm ci` limpo, 4 testes passando, `next build` gerando `out/` com as 5 páginas, `npm audit --omit=dev` com 0 vulnerabilidades, e navegação real no Chromium servindo `out/` em `/sushibar/`: as 5 páginas respondem 200, o menu navega entre Início, Cardápio, Bebidas e Nosso espaço, as abas de categoria trocam os itens, nenhuma imagem quebrada, console sem erros.
 
 ### Limitações do plano gratuito
 
@@ -45,47 +46,46 @@ Verificação feita antes da entrega (já sem os arquivos que o PENDENCIAS manda
 
 ## 3. Solução (passo a passo)
 
+> Revisto em 16/11/2026. O workflow já está em `.github/workflows/ci.yml` e a `main` só recebe mudanças por PR. Faltam as etapas 2 a 4, do responsável (#10).
+
 ### Etapa 1 · Validar localmente (Git Bash)
 
-1. `cd /c/ambiente-projeto/ser-mvp/sushibar`
-2. Apagar os arquivos substituídos (o `git rm` já tira do disco):
-   `git rm pages/helpers/translator.ts pages/api/test.ts pages/help.tsx styles/Help.module.css layouts/ListItem.tsx layouts/ListProducts.tsx components/ProductHamburguerMenu.tsx components/Icons/IconStar.tsx`
-   `git rm -r services/Strapi services/Supabase components/Images components/styles`
-   Opcional (o `next lint` saiu no Next 16): `git rm .eslintrc.json`
-3. `npm install` (Next 16 exige Node 20.9+; use o Node 22)
-4. `npm test` (esperado: 4 testes passando)
-5. `npm run build` (esperado: pasta `out/` com `index.html`, `cardapio/`, `bebidas/`, `produtos/`, `nossoespaco/` e `404.html`)
-6. Opcional com Supabase: criar `.env.local` a partir do `.env.example` e rodar `npm run dev`.
+1. `git clone -c core.longpaths=true https://github.com/douglasabnovato/sushibar` e `cd sushibar`
+2. `npm ci` (Next 16 exige Node 20.9+; o CI usa o Node 22)
+3. `npm test` (esperado: 15 testes passando)
+4. `npm run build` (esperado: pasta `out/` com `index.html`, `cardapio/`, `bebidas/`, `produtos/`, `nossoespaco/` e `404.html`)
+5. `npx playwright install chromium` e `npm run test:e2e` (esperado: 9 testes passando; o teste serve `out/` em `http://localhost:4317/sushibar/`, como o Pages)
 
-### Etapa 2 · Subir para o GitHub (branch `main`)
+### Etapa 2 · Mesclar a sprint na `main` (responsável)
 
-> Atualização de 10/11/2026: o workflow já está em `.github/workflows/ci.yml`, e a `main` só recebe mudanças por PR. Resta a etapa 3 (ligar o Pages) e o responsável mesclar o PR da sprint na `main`. Os passos abaixo ficam como histórico.
+1. Revisar e mesclar o PR `developer/sprint-2026-11-12` → `main` (#21), com os jobs `raiz` e `e2e` verdes.
+2. Com o Pages ainda desligado, o job `deploy` aparece como *skipped*: a `main` fica verde.
 
-1. Ativar o CI (a pasta `.github` é protegida para a ferramenta que preparou o projeto, então o arquivo veio em `ci/`; as imagens que já estão em `.github/` continuam lá):
-   `mkdir -p .github/workflows && mv ci/github-actions-ci.yml .github/workflows/ci.yml && rmdir ci`
-2. `git status` (não podem aparecer `out/`, `.next/`, `node_modules/` nem `.env.local`)
-3. `git add -A`
-4. `git commit -m "feat(deploy): exportação estática do Next e publicação no GitHub Pages por Actions"`
-5. `git push origin main`
+### Etapa 3 · Ligar o GitHub Pages (responsável)
 
-### Etapa 3 · Ativar o GitHub Pages
-
-1. No repositório, **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-2. Só se for usar o Supabase: **Settings → Secrets and variables → Actions → aba Variables → New repository variable**:
+1. No repositório, **Settings → Pages → Build and deployment → Source**: escolher **GitHub Actions**. Não precisa salvar mais nada nessa tela.
+2. **Settings → Secrets and variables → Actions → aba Variables → New repository variable**:
+   - Name: `PAGES_VIA_ACTIONS`
+   - Value: `true`
+   - **Add variable**.
+3. Só se for usar o Supabase, na mesma aba **Variables**:
    - `NEXT_PUBLIC_SUPABASE_URL` = URL do projeto (Project Settings → API)
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = chave `anon` pública
    Sem elas, o site usa `data/menu.ts`.
-3. Aba **Actions**: o workflow **CI** roda `web` (testes e build) e `deploy`. Se o `deploy` falhou porque o Pages ainda não estava ativo, clique em **Re-run all jobs** (ou **Run workflow** na `main`).
+4. **Actions → CI → Run workflow**, branch `main`, **Run workflow**. Os jobs `raiz`, `e2e` e `deploy` devem ficar verdes.
 
 ### Etapa 4 · Conferir no ar
 
-1. Abrir `https://douglasabnovato.github.io/sushibar/`: arte do cabeçalho, destaques e atalhos.
-2. Menu: **Cardápio**, **Bebidas** e **Nosso espaço** abrem; nas abas do cardápio, trocar de categoria muda os itens.
-3. F5 em `/sushibar/cardapio/`: a página continua. `/sushibar/xyz` mostra a página 404.
-4. **Reservar pelo WhatsApp** abre `wa.me` com a mensagem de reserva.
-5. F12 → Console e Network: nenhum erro nem arquivo 404 (o favicon carrega).
-6. Com Supabase: o log do job `web`, no passo de build, não mostra "usando o cardápio local".
+1. `curl -s -o /dev/null -w "%{http_code}" https://douglasabnovato.github.io/sushibar/` devolve `200`.
+2. Abrir `https://douglasabnovato.github.io/sushibar/`: arte do cabeçalho, destaques e atalhos. O primeiro Tab mostra "Pular para o conteúdo".
+3. Menu: **Cardápio**, **Bebidas** e **Nosso espaço** abrem; nas abas do cardápio, trocar de categoria muda os itens; buscar "salmão" mostra 4 itens.
+4. F5 em `/sushibar/cardapio/`: a página continua. `/sushibar/xyz` mostra a página 404.
+5. **Reservar pelo WhatsApp** abre `wa.me` com a mensagem de reserva.
+6. F12 → Console e Network: nenhum erro nem arquivo 404 (o favicon carrega).
+7. Com Supabase: o log do job `raiz`, no passo de build, não mostra "usando o cardápio local".
+8. Atenção: o job `e2e` testa o build com o cardápio local. Com o Supabase ligado, o cardápio publicado não passa pelo axe; conferir à mão os itens 3 e 6.
 
 ### Etapa 5 · Fechar
 
 1. No GitHub, **About → Website**: colar `https://douglasabnovato.github.io/sushibar/`.
+2. Comentar na #10 o código HTTP e a data, e trocar o aviso "Fora do ar" do README pelo link.

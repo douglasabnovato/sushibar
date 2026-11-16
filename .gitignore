@@ -37,3 +37,7 @@ next-env.d.ts
 
 # variáveis de ambiente
 .env
+
+# Playwright
+/test-results/
+/playwright-report/
