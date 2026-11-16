@@ -1,4 +1,4 @@
-# CI: testes e build do Next.js (exportação estática em out/) em PR e push; publicação no GitHub Pages só na main, depois do build verde
+# CI: testes e build do Next.js (exportação estática em out/) e teste no navegador (Playwright + axe) em PR e push; publicação no GitHub Pages só na main, depois dos dois jobs verdes e com a variável PAGES_VIA_ACTIONS=true
 name: CI
 
 on:
@@ -28,16 +28,38 @@ jobs:
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-      # Artefato do Pages só na main (push ou "Run workflow")
+      # Artefato do Pages só na main (push ou "Run workflow") e com o Pages ligado pelo responsável
       - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.PAGES_VIA_ACTIONS == 'true'
         with:
           path: out
 
-  # Publicação: só na main e só depois do job raiz verde
+  # Fluxo principal no navegador, com axe nas 5 páginas nos temas claro e escuro e teste de teclado
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Build com o cardápio local (data/menu.ts), para o teste não depender do Supabase
+      - run: npm run build
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-trace
+          path: test-results
+          retention-days: 7
+
+  # Publicação: só na main, depois dos jobs verdes, e só com a variável PAGES_VIA_ACTIONS=true (criada pelo responsável ao ligar o Pages)
   deploy:
-    needs: raiz
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    needs: [raiz, e2e]
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.PAGES_VIA_ACTIONS == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write
