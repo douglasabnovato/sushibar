@@ -10,7 +10,7 @@
 
 ## 1. Critérios: 10 de 10 aplicáveis atendidos
 
-Evidência do CI: run [43799103952](https://github.com/douglasabnovato/sushibar/actions/runs/43799103952) do PR #23, jobs `raiz` (Vitest e build) e `e2e` (Playwright com axe), no commit `5cb394d`, em 16/11/2026: verdes, 15 testes do Vitest e 9 do Playwright passando.
+Evidência do CI: run [43799300472](https://github.com/douglasabnovato/sushibar/actions/runs/43799300472) do PR #23, jobs `raiz` (Vitest e build) e `e2e` (Playwright com axe), no commit `4a9b9e1`, em 16/11/2026: verdes, 15 testes do Vitest e 9 do Playwright passando, sem repetição. As correções da revisão independente vieram depois e passaram localmente (15 e 9 testes); o run do último commit do PR está no corpo do PR.
 
 | # | Critério | Como verificar | Situação em 16/11/2026 | Evidência |
 |---|---|---|---|---|
@@ -24,7 +24,7 @@ Evidência do CI: run [43799103952](https://github.com/douglasabnovato/sushibar/
 | 8 | Acessibilidade básica | axe e teclado no teste do navegador | Atende | `npm run test:e2e`, 16/11/2026: axe (WCAG 2.0, 2.1 e 2.2 A e AA) sem violações nas 5 páginas, em largura de desktop, com o cardápio local; teclado: o 1º Tab mostra "Pular para o conteúdo", Enter leva ao conteúdo, foco visível com contorno de 3 px, setas e End nas abas. O app não tem tema escuro próprio: força o claro, e um teste confere que, com o sistema em modo escuro, a tela segue clara e sem violações |
 | 9 | Segurança e conformidade | `npm audit --omit=dev` e Dependabot | Atende | `npm audit --omit=dev`, 16/11/2026: 0 vulnerabilidades. Alertas do Dependabot desligados no repositório (`gh api repos/douglasabnovato/sushibar/dependabot/alerts`, 16/11/2026: 403); pela regra do processo, com a API desligada o audit é a fonte única, e ligar os alertas fica com o responsável (#25). Sem segredo no código: as variáveis do Supabase são públicas e ficam em Variables. O site não coleta dados |
 | 10 | Entrega confiável | CI nos PRs e principal protegida | Atende | `gh api repos/douglasabnovato/sushibar/rules/branches/main`, 16/11/2026: `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` (`raiz`). Exigir também o `e2e` fica com o responsável (#24) |
-| 11 | Testes dos fluxos críticos | Testes no CI, sem `skipped` | Atende | Run 43799103952: job `raiz` com 15 testes do Vitest e job `e2e` com 9 testes do Playwright, nenhum pulado |
+| 11 | Testes dos fluxos críticos | Testes no CI, sem `skipped` | Atende | Run 43799300472: job `raiz` com 15 testes do Vitest e job `e2e` com 9 testes do Playwright, nenhum pulado |
 | 12 | Documentação honesta | README com comandos conferidos | Atende | Comandos do README conferidos com o `package.json` em 16/11/2026 (`dev`, `build`, `test`, `test:e2e`); sem link publicado, porque o site dá 404 |
 
 **Revisão de 16/11/2026.** O resumo anterior dizia 10 de 10, mas 4 "Atende" não tinham a evidência da régua: 2 (sem "saberemos quando"), 3 (sem teste no navegador no CI), 8 (axe manual de 02/11) e 9 (sem comando do audit). Contagem real antes deste ciclo: 6 de 10.
