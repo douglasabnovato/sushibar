@@ -84,10 +84,15 @@ test("com o sistema em modo escuro, o cardápio segue claro e sem violações", 
   await semViolacoes(page);
 });
 
-test("rota que não existe mostra a página 404 do site", async ({ page }) => {
+test("rota que não existe mostra a página 404 em português, com o menu e o link para o cardápio", async ({ page }) => {
   const resposta = await page.goto("nao-existe/");
   expect(resposta?.status()).toBe(404);
-  await expect(page.getByRole("heading", { level: 1, name: "404" })).toBeVisible();
-  await expect(page).toHaveTitle(/404/);
+  await expect(page.getByRole("heading", { level: 1, name: "Página não encontrada" })).toBeVisible();
+  await expect(page).toHaveTitle("Página não encontrada | Sushibar");
+  await expect(page.getByRole("navigation", { name: "Principal" })).toBeVisible();
+  await semViolacoes(page);
+  await page.getByRole("main").getByRole("link", { name: "Ver o cardápio" }).click();
+  await expect(page).toHaveURL(/\/sushibar\/cardapio\/$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Cardápio" })).toBeVisible();
 });
 /* Fim de fluxo.e2e.ts */
