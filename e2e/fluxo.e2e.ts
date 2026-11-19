@@ -1,4 +1,4 @@
-/* Fluxo principal na tela: do início ao preço de um prato pela busca e pelas abas, com axe nas 5 páginas, teclado e sistema em modo escuro */
+/* Fluxo principal na tela: do início ao preço de um prato pela busca e pelas abas, com axe nas 5 páginas e na 404, teclado (cardápio, página inicial, Nosso espaço e celular) e sistema em modo escuro */
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
@@ -84,10 +84,67 @@ test("com o sistema em modo escuro, o cardápio segue claro e sem violações", 
   await semViolacoes(page);
 });
 
-test("rota que não existe mostra a página 404 do site", async ({ page }) => {
+test("rota que não existe mostra a página 404 em português, com o menu e o link para o cardápio", async ({ page }) => {
   const resposta = await page.goto("nao-existe/");
   expect(resposta?.status()).toBe(404);
-  await expect(page.getByRole("heading", { level: 1, name: "404" })).toBeVisible();
-  await expect(page).toHaveTitle(/404/);
+  await expect(page.getByRole("heading", { level: 1, name: "Página não encontrada" })).toBeVisible();
+  await expect(page).toHaveTitle("Página não encontrada | Sushibar");
+  await expect(page.getByRole("navigation", { name: "Principal" })).toBeVisible();
+  await semViolacoes(page);
+  await page.getByRole("main").getByRole("link", { name: "Ver o cardápio" }).click();
+  await expect(page).toHaveURL(/\/sushibar\/cardapio\/$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Cardápio" })).toBeVisible();
+});
+
+/* Cor do contorno do foco: o azul #1d4ed8 do app, e não o contorno padrão do navegador */
+const corDoContorno = (page: Page) => page.locator(":focus").evaluate((el) => getComputedStyle(el).outlineColor);
+const AZUL_FOCO = "rgb(29, 78, 216)";
+
+test("na página inicial, o Tab passa pelos 3 atalhos de Veja mais com foco visível", async ({ page }) => {
+  await page.goto("");
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("link", { name: "Pular para o conteúdo" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main")).toBeFocused();
+
+  const vejaMais = page.getByRole("region", { name: "Veja mais" });
+  for (const nome of ["Cardápio", "Bebidas", "Nosso espaço"]) {
+    await page.keyboard.press("Tab");
+    await expect(vejaMais.getByRole("link", { name: nome })).toBeFocused();
+    expect(await contorno(page)).toEqual({ estilo: "solid", largura: 3 });
+    expect(await corDoContorno(page)).toBe(AZUL_FOCO);
+  }
+});
+
+test("em Nosso espaço, o link de reserva recebe foco pelo Tab e abre o WhatsApp com a mensagem", async ({ page }) => {
+  await page.goto("nossoespaco/");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main")).toBeFocused();
+  await page.keyboard.press("Tab");
+
+  const reservar = page.getByRole("link", { name: /Reservar pelo WhatsApp/ });
+  await expect(reservar).toBeFocused();
+  expect(await contorno(page)).toEqual({ estilo: "solid", largura: 3 });
+  const href = new URL((await reservar.getAttribute("href")) ?? "");
+  expect(href.hostname).toBe("wa.me");
+  expect(href.searchParams.get("text")).toBe("Olá! Gostaria de fazer uma reserva no Sushibar.");
+  await expect(reservar).toHaveAttribute("target", "_blank");
+});
+
+test("no celular (375 px), o menu principal é alcançado pelo Tab, com foco visível", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("");
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("link", { name: "Pular para o conteúdo" })).toBeFocused();
+
+  const menu = page.getByRole("navigation", { name: "Principal" });
+  for (const nome of ["Início", "Cardápio", "Bebidas", "Nosso espaço"]) {
+    await page.keyboard.press("Tab");
+    const link = menu.getByRole("link", { name: nome });
+    await expect(link).toBeFocused();
+    await expect(link).toBeInViewport();
+    expect(await contorno(page)).toEqual({ estilo: "solid", largura: 3 });
+  }
 });
 /* Fim de fluxo.e2e.ts */
