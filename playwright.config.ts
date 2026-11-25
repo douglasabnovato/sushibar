@@ -16,11 +16,12 @@ export default defineConfig({
     { name: "celular-320", use: { ...devices["Pixel 7"], viewport: { width: 320, height: 640 }, colorScheme: "light" } },
   ],
   webServer: {
-    command: "node e2e/servidor.mjs",
+    /* No local, refaz o build antes de servir: sem ele, uma mudança no CSS testaria o out/ antigo (R19 do #38). O CI já faz o build no passo anterior */
+    command: process.env.CI ? "node e2e/servidor.mjs" : "npm run build && node e2e/servidor.mjs",
     url: `http://localhost:${PORTA}/sushibar/`,
     env: { PORT: String(PORTA) },
     reuseExistingServer: false,
-    timeout: 30_000,
+    timeout: process.env.CI ? 30_000 : 180_000,
   },
 });
 /* Fim de playwright.config.ts */
