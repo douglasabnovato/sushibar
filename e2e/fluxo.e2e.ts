@@ -1,4 +1,4 @@
-/* Fluxo principal na tela: do início ao preço de um prato pela busca e pelas abas, com axe nas 5 páginas e na 404, teclado (cardápio, página inicial, Nosso espaço e celular) e sistema em modo escuro */
+/* Fluxo principal na tela: do início ao preço de um prato pela busca e pelas abas, com axe nas 5 páginas e na 404, teclado (cardápio, página inicial, Nosso espaço e celular) e sistema em modo escuro. Roda na mesa e a 320 px (playwright.config.ts), com a medida de corte nas 2 bordas antes de cada axe */
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
@@ -10,8 +10,38 @@ const PAGINAS = [
   ["nossoespaco/", "Lounge Sushibar"],
 ] as const;
 
-/* axe sem violações nas regras WCAG A e AA */
+/* Sem rolagem lateral e sem conteúdo cortado nas bordas (#35). Duas medidas:
+   1. a largura do documento não passa da área visível;
+   2. nenhum elemento visível passa da borda direita nem da esquerda.
+   Não tirar a 2ª: é a única que pega o corte por overflow: hidden (que não muda o scrollWidth)
+   e o corte à esquerda (que não gera rolagem), como provaram as mutações da R19 do huntweb-swapi#57.
+   Ficam de fora o invisível de propósito: visibility: hidden, opacity: 0 e o 1 x 1 px do leitor de tela.
+   O link "Pular para o conteúdo" fica acima da tela, e não ao lado, por isso não precisa de exceção */
+async function semCorteLateral(page: Page) {
+  const { largura, janela, fora } = await page.evaluate(() => {
+    const janela = document.documentElement.clientWidth;
+    const fora = Array.from(document.querySelectorAll("body *"))
+      .filter((e) => {
+        const c = e.getBoundingClientRect();
+        if (c.width <= 1 || c.height <= 1) return false;
+        if (c.right <= janela + 1 && c.left >= -1) return false;
+        const s = getComputedStyle(e);
+        return s.visibility !== "hidden" && s.opacity !== "0";
+      })
+      .slice(0, 5)
+      .map((e) => {
+        const c = e.getBoundingClientRect();
+        return `${e.tagName}${e.id ? "#" + e.id : ""}${e.classList[0] ? "." + e.classList[0] : ""} (${Math.round(c.left)} a ${Math.round(c.right)} px)`;
+      });
+    return { largura: document.documentElement.scrollWidth, janela, fora };
+  });
+  expect(largura, "rolagem lateral").toBeLessThanOrEqual(janela);
+  expect(fora, "elementos além das bordas").toEqual([]);
+}
+
+/* axe sem violações nas regras WCAG A e AA; antes, a medida de corte lateral */
 async function semViolacoes(page: Page) {
+  await semCorteLateral(page);
   const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
 }
@@ -55,6 +85,8 @@ test("acha o preço de um prato pelo menu, pela busca e pelas abas", async ({ pa
   await page.keyboard.press("End");
   await expect(page.getByRole("tab", { name: "Bebidas" })).toBeFocused();
   await expect(page.getByRole("tabpanel")).toContainText("Chá verde gelado");
+  /* O cardápio com as abas, depois de ir até a última */
+  await semCorteLateral(page);
 });
 
 test("o primeiro Tab mostra o link de pular, que leva ao conteúdo; o foco fica visível", async ({ page }) => {
