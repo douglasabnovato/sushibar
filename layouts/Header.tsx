@@ -23,7 +23,7 @@ export default function Header({ title, hero = false }: { title: string; hero?: 
           </ul>
         </nav>
         {hero && (
-          <div className="relative p-2">
+          <div className="relative px-3 py-2">
             <Image src={headerImg} alt="" priority sizes="100vw" className="w-full h-auto rounded-3xl" />
             <Image src={headerText} alt="Sushibar" sizes="100vw" className="w-full h-auto" />
           </div>
