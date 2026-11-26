@@ -5,7 +5,7 @@ import ProductImage from "./ProductImage";
 
 export default function ProductBox({ products }: { products: MenuItem[] }) {
   return (
-    <ul className="grid grid-cols-2 gap-2 px-1">
+    <ul className="grid grid-cols-2 gap-2 px-3">
       {products.map((p) => (
         <li key={p.id} className="flex gap-2 bg-white border-2 border-gray-300 p-2.5 rounded-xl shadow-lg text-tahiti-100">
           <div className="relative w-2/5 min-h-[72px] shrink-0"><ProductImage item={p} sizes="20vw" /></div>

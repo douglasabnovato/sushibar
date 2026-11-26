@@ -6,7 +6,7 @@ import ProductImage from "./ProductImage";
 export default function ProductItem({ products }: { products: MenuItem[] }) {
   if (!products.length) return <p className="mx-3 my-6 text-tahiti-56">Nenhum item nesta categoria no momento.</p>;
   return (
-    <ul className="mx-1">
+    <ul className="mx-3">
       {products.map((p) => (
         <li key={p.id} className="bg-white border-2 border-gray-300 p-2.5 rounded-xl shadow-lg text-tahiti-100 flex my-2 gap-3">
           <div className="relative w-2/5 min-h-[96px] shrink-0"><ProductImage item={p} sizes="40vw" /></div>

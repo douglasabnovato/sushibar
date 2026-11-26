@@ -67,6 +67,13 @@ for (const [caminho, titulo] of PAGINAS) {
     await page.goto(caminho);
     await expect(page.getByRole("heading", { level: 1, name: titulo })).toBeAttached();
     await semViolacoes(page);
+    /* Margem dos cards (#39): a 12 px das 2 bordas, alinhados ao título e à busca; antes, a 4 px. Só nos cards, não em todo elemento */
+    const largura = page.viewportSize()!.width;
+    const cards = await page.locator("main li.bg-white").evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [r.left, r.right]; }));
+    for (const [esq, dir] of cards) {
+      expect(esq, "margem esquerda do card").toBeGreaterThanOrEqual(11.5);
+      expect(largura - dir, "margem direita do card").toBeGreaterThanOrEqual(11.5);
+    }
   });
 }
 
