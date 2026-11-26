@@ -67,12 +67,29 @@ for (const [caminho, titulo] of PAGINAS) {
     await page.goto(caminho);
     await expect(page.getByRole("heading", { level: 1, name: titulo })).toBeAttached();
     await semViolacoes(page);
-    /* Margem dos cards (#39): a 12 px das 2 bordas, alinhados ao título e à busca; antes, a 4 px. Só nos cards, não em todo elemento */
+    /* Margem dos cards (#39): a 12 px das 2 bordas, alinhados ao título e à busca; antes, a 4 px. Só nos cards, não em todo elemento.
+       Exige pelo menos 1 card (R19 do QA no #42: se o seletor não achar nada, o laço passava vazio) e mede cada aba do Cardápio */
     const largura = page.viewportSize()!.width;
-    const cards = await page.locator("main li.bg-white").evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [r.left, r.right]; }));
-    for (const [esq, dir] of cards) {
-      expect(esq, "margem esquerda do card").toBeGreaterThanOrEqual(11.5);
-      expect(largura - dir, "margem direita do card").toBeGreaterThanOrEqual(11.5);
+    const medirCards = async (onde: string) => {
+      const cards = await page.locator("main li.bg-white").evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [r.left, r.right]; }));
+      if (caminho !== "nossoespaco/") expect(cards.length, `nenhum card achado pelo seletor em ${onde}`).toBeGreaterThan(0);
+      for (const [esq, dir] of cards) {
+        expect(esq, `margem esquerda do card em ${onde}`).toBeGreaterThanOrEqual(11.5);
+        expect(largura - dir, `margem direita do card em ${onde}`).toBeGreaterThanOrEqual(11.5);
+      }
+    };
+    await medirCards(`/${caminho}`);
+    if (caminho === "cardapio/") {
+      for (const aba of await page.getByRole("tab").all()) {
+        await aba.click();
+        await medirCards(`a aba ${(await aba.textContent())?.trim()}`);
+      }
+    }
+    /* A foto do topo da página inicial fica a 12 px, alinhada aos cards (R19 do UX/UI no #42, nota 1) */
+    if (caminho === "") {
+      const foto = (await page.getByRole("img", { name: "Sushibar" }).boundingBox())!;
+      expect(foto.x, "margem esquerda da faixa do topo").toBeGreaterThanOrEqual(11.5);
+      expect(largura - (foto.x + foto.width), "margem direita da faixa do topo").toBeGreaterThanOrEqual(11.5);
     }
   });
 }
