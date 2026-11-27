@@ -54,7 +54,7 @@ Site no ar: `douglasabnovato.github.io/sushibar/` responde 200 em 18/11/2026. A 
 
 ## Stack
 
-Next.js 16 (Pages Router, exportação estática) · React 19 · Tailwind CSS 3 · Supabase (opcional)
+Next.js 16 (Pages Router, exportação estática) · React 19 · Tailwind CSS 4 (tema em `styles/globals.css`) · Supabase (opcional)
 
 ## Como executar
 
@@ -66,7 +66,7 @@ npm run dev     # http://localhost:3000
 npm test        # 15 testes (Vitest)
 npm run build   # gera out/ (site estático publicado em /sushibar)
 npx playwright install chromium   # uma vez, antes do teste no navegador
-npm run test:e2e                  # 12 testes no navegador (Playwright + axe), servindo out/ em http://localhost:4317/sushibar/
+npm run test:e2e                  # 13 testes no navegador (Playwright + axe), na mesa e a 320 px, servindo out/ em http://localhost:4317/sushibar/
 ```
 
 ## De onde vem o cardápio

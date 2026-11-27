@@ -219,3 +219,19 @@ test("no celular (375 px na mesa, 320 no celular-320), o menu principal é alcan
   await semCorteLateral(page);
 });
 /* Fim de fluxo.e2e.ts */
+
+/* Tailwind 4 (#27): as utilidades ficam em @layer, e o CSS próprio fora de camada ganharia delas. Este teste pega isso:
+   a cor dos atalhos (text-tahiti-100) e do link da 404 (text-[#9a3412]), o fundo branco da busca e o contorno dela no foco */
+test("as utilidades ganham do CSS próprio: cor dos links, fundo e contorno da busca", async ({ page }) => {
+  await page.goto("./");
+  await expect(page.locator('a.shadow-lg[href*="cardapio"]')).toHaveCSS("color", "rgb(0, 0, 0)");
+  await page.goto("./nada-aqui");
+  await expect(page.getByRole("main").getByRole("link").first()).toHaveCSS("color", "rgb(154, 52, 18)");
+  await page.goto("./cardapio");
+  const busca = page.getByLabel("Buscar no cardápio");
+  await expect(busca).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await busca.focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  await expect(busca).toHaveCSS("outline", "2px solid rgb(154, 52, 18)");
+});
