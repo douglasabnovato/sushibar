@@ -219,3 +219,32 @@ test("no celular (375 px na mesa, 320 no celular-320), o menu principal é alcan
   await semCorteLateral(page);
 });
 /* Fim de fluxo.e2e.ts */
+
+/* Tailwind 4 (#27): as utilidades ficam em @layer, e o CSS próprio fora de camada ganharia delas. Este teste pega isso:
+   a cor dos atalhos (text-tahiti-100) e do link da 404 (text-[#9a3412]), o fundo branco da busca e o contorno dela no foco */
+test("as utilidades ganham do CSS próprio: cor dos links, fundo e contorno da busca", async ({ page }) => {
+  await page.goto("./");
+  await expect(page.locator('a.shadow-lg[href*="cardapio"]')).toHaveCSS("color", "rgb(0, 0, 0)");
+  await page.goto("./nada-aqui");
+  await expect(page.getByRole("main").getByRole("link").first()).toHaveCSS("color", "rgb(154, 52, 18)");
+  await page.goto("./cardapio");
+  const busca = page.getByLabel("Buscar no cardápio");
+  await expect(busca).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await busca.focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  await expect(busca).toHaveCSS("outline", "2px solid rgb(154, 52, 18)");
+});
+
+/* Tailwind 4 (#27, R19 do QA no #47): os valores do v3 que o v4 mudaria em silêncio. A mãozinha nas abas, a altura de linha 1.5
+   do text-sm (o v4 traz 1.43) e o placeholder da busca no gray-400 do v3 (o v4 usa oklch) */
+test("o que o v4 mudaria fica como no v3: mãozinha nas abas, altura de linha e cor do placeholder", async ({ page }) => {
+  await page.goto("./");
+  const menu = page.getByRole("navigation").first().locator("ul");
+  await expect(menu).toHaveCSS("font-size", "12.8px");
+  await expect(menu).toHaveCSS("line-height", "19.2px");
+  await page.goto("./cardapio");
+  await expect(page.getByRole("tab").first()).toHaveCSS("cursor", "pointer");
+  const cor = await page.getByLabel("Buscar no cardápio").evaluate((e) => getComputedStyle(e, "::placeholder").color);
+  expect(cor).toBe("rgb(156, 163, 175)");
+});
