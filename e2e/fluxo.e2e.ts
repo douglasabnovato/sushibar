@@ -237,14 +237,23 @@ test("as utilidades ganham do CSS próprio: cor dos links, fundo e contorno da b
 });
 
 /* Tailwind 4 (#27, R19 do QA no #47): os valores do v3 que o v4 mudaria em silêncio. A mãozinha nas abas, a altura de linha 1.5
-   do text-sm (o v4 traz 1.43) e o placeholder da busca no gray-400 do v3 (o v4 usa oklch) */
-test("o que o v4 mudaria fica como no v3: mãozinha nas abas, altura de linha e cor do placeholder", async ({ page }) => {
+   do text-sm (o v4 traz 1.43) */
+test("o que o v4 mudaria fica como no v3: mãozinha nas abas e altura de linha", async ({ page }) => {
   await page.goto("./");
   const menu = page.getByRole("navigation").first().locator("ul");
   await expect(menu).toHaveCSS("font-size", "12.8px");
   await expect(menu).toHaveCSS("line-height", "19.2px");
   await page.goto("./cardapio");
   await expect(page.getByRole("tab").first()).toHaveCSS("cursor", "pointer");
-  const cor = await page.getByLabel("Buscar no cardápio").evaluate((e) => getComputedStyle(e, "::placeholder").color);
-  expect(cor).toBe("rgb(156, 163, 175)");
+});
+
+/* Contraste do placeholder da busca (#48, W-1.4.3): #595959 sobre o branco dá 7:1, o mesmo do exemplo da busca do huntweb-swapi.
+   A opacidade 1 vem do preflight do v4 e impede o Firefox de clarear a cor; o fundo branco é conferido no teste da busca acima */
+test("o placeholder da busca tem contraste de 7:1", async ({ page }) => {
+  await page.goto("./cardapio");
+  const estilo = await page.getByLabel("Buscar no cardápio").evaluate((e) => {
+    const p = getComputedStyle(e, "::placeholder");
+    return { cor: p.color, opacidade: p.opacity };
+  });
+  expect(estilo).toEqual({ cor: "rgb(89, 89, 89)", opacidade: "1" });
 });

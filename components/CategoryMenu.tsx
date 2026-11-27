@@ -30,7 +30,7 @@ export default function CategoryMenu({ menu, initialCategoryId }: { menu: Menu; 
       <div className="mx-3 mb-3">
         <label htmlFor="busca-cardapio" className="block text-sm font-semibold mb-1">Buscar no cardápio</label>
         <input id="busca-cardapio" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Ex.: salmão"
-          autoComplete="off" className="w-full rounded-lg border-2 border-gray-400 bg-white placeholder:text-gray-400 px-3 py-2 text-base focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-[#9a3412]" />
+          autoComplete="off" className="w-full rounded-lg border-2 border-gray-400 bg-white placeholder:text-[#595959] px-3 py-2 text-base focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-[#9a3412]" />
         <p className="sr-only" aria-live="polite">{searching ? searchSummary(results.length, query) : ""}</p>
       </div>
       {searching ? (
