@@ -58,6 +58,8 @@ Next.js 16 (Pages Router, exportação estática) · React 19 · Tailwind CSS 3 
 
 ## Como executar
 
+Use o Node 22 com o npm 10, os mesmos da CI. Com outro npm, o `npm install` para com `EBADENGINE`: o `.npmrc` liga o `engine-strict`, para o lock ser sempre gerado pelo mesmo npm ([#44](https://github.com/douglasabnovato/sushibar/issues/44)).
+
 ```bash
 npm install
 npm run dev     # http://localhost:3000
