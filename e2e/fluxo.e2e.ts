@@ -248,12 +248,16 @@ test("o que o v4 mudaria fica como no v3: mãozinha nas abas e altura de linha",
 });
 
 /* Contraste do placeholder da busca (#48, W-1.4.3): #595959 sobre o branco dá 7:1, o mesmo do exemplo da busca do huntweb-swapi.
-   A opacidade 1 vem do preflight do v4 e impede o Firefox de clarear a cor; o fundo branco é conferido no teste da busca acima */
-test("o placeholder da busca tem contraste de 7:1", async ({ page }) => {
-  await page.goto("./cardapio");
-  const estilo = await page.getByLabel("Buscar no cardápio").evaluate((e) => {
-    const p = getComputedStyle(e, "::placeholder");
-    return { cor: p.color, opacidade: p.opacity };
+   A opacidade 1 vem do preflight do v4 e impede o Firefox de clarear a cor; o fundo branco é conferido no teste da busca acima.
+   Roda também com o sistema em modo escuro: uma regra dark: no placeholder passaria só no claro (R19 do QA no #49) */
+for (const tema of ["light", "dark"] as const) {
+  test(`o placeholder da busca tem contraste de 7:1 (sistema ${tema === "light" ? "claro" : "escuro"})`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: tema });
+    await page.goto("./cardapio");
+    const estilo = await page.getByLabel("Buscar no cardápio").evaluate((e) => {
+      const p = getComputedStyle(e, "::placeholder");
+      return { cor: p.color, opacidade: p.opacity };
+    });
+    expect(estilo).toEqual({ cor: "rgb(89, 89, 89)", opacidade: "1" });
   });
-  expect(estilo).toEqual({ cor: "rgb(89, 89, 89)", opacidade: "1" });
-});
+}
