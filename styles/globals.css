@@ -65,6 +65,12 @@
 
 /* Os estilos próprios ficam na camada base, como no v3, que os punha antes das utilidades. No v4 as utilidades estão em @layer, e o CSS fora de camada ganharia delas: o a { color: inherit } apagaria o text-tahiti-100 e o text-[#9a3412] dos links, e o :focus-visible apagaria o contorno da busca (#27) */
 @layer base {
+  /* O v4 trocou a mãozinha dos botões pelo cursor padrão; esta é a regra do guia de migração, para as abas seguirem como no v3 (R19 do QA no #47) */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   html,
   body {
     padding: 0;

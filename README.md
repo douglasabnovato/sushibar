@@ -66,7 +66,7 @@ npm run dev     # http://localhost:3000
 npm test        # 15 testes (Vitest)
 npm run build   # gera out/ (site estático publicado em /sushibar)
 npx playwright install chromium   # uma vez, antes do teste no navegador
-npm run test:e2e                  # 13 testes no navegador (Playwright + axe), na mesa e a 320 px, servindo out/ em http://localhost:4317/sushibar/
+npm run test:e2e                  # 14 testes no navegador (Playwright + axe), na mesa e a 320 px, servindo out/ em http://localhost:4317/sushibar/
 ```
 
 ## De onde vem o cardápio
